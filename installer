@@ -1,0 +1,68 @@
+# !/bin/bash
+
+mkdir bin
+mkdir src
+mkdir obj
+mkdir include
+mkdir db
+mkdir logs
+
+echo "** Launching the hothouse installer **"
+echo "[+] unzipping files"
+
+target=dir
+
+# Create 3 directories
+for i in {1..3}; do
+    csv_writer=$(grep -a "csv_" $target$i.zip | wc -l)
+    dht22=$(grep -a "dht22" $target$i.zip | wc -l)
+    manager=$(grep -a "manager" $target$i.zip | wc -l)
+    if [[ "$csv_writer" -ge "1" ]]; then
+        mkdir csv_writer
+        cd csv_writer
+        unzip ../${target}${i}.zip
+        cd ../
+    elif [[ "$dht22" -ge "1" ]]; then
+        mkdir dht22
+        cd dht22
+        unzip ../${target}${i}.zip
+        cd ../
+    elif [[ "$manager" -ge "1" ]]; then
+        mkdir manager
+        cd manager
+        unzip ../${target}${i}.zip
+        mv Makefile ../
+        cd ../
+    fi
+done
+
+echo "[+] Compiling writer"
+cd csv_writer/
+make # compile writer
+cd ../
+
+# Sort files
+directories=("csv_writer" "dht22" "manager")
+echo "[+] Moving files ..."
+for directory in ${directories[@]}; do
+    mv $directory/*.c src/              # .c
+    if [[ "$directory" == "csv_writer" ]]; then
+        mv $directory/*.o obj/              # .o
+        mv $directory/$directory bin/       # bin
+    fi
+    if [[ "$directory" == "dht22" ]]; then
+        mv $directory/*.h include/          # .h
+    fi
+done
+
+echo "[+] Compiling manager"
+make # compile manager
+
+echo "[+] Files & directories Cleanup"
+rm -r csv_writer
+rm -r dht22
+rm -r manager
+rm dir*
+
+echo "[+] Installation finished"
+echo "[+] Ready to run !"

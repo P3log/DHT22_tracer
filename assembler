@@ -1,0 +1,20 @@
+#!/bin/bash
+
+base=("csv_writer" "dht22" "manager")
+
+# zip directories
+dirnb=1
+for file in ${base[@]}; do
+    if [[ -d $file ]]; then
+        cd $file
+        files=$(ls -1)
+        for f in ${files[@]}; do
+            zip -r ../dir${dirnb}.zip $f
+        done
+        dirnb=$((dirnb + 1))
+        cd ../ # back to root
+    fi
+done
+
+zip -r tracer.zip installer dir*
+rm dir*.zip

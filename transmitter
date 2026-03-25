@@ -1,0 +1,19 @@
+#!/bin/bash
+
+id=$1
+ip=$2
+
+if [[ "$#" -ne "2" ]]; then
+    echo "Usage: $0 ID IP FILE_TO_TRANSMIT"
+    exit 1
+fi
+
+file="tracer.zip"
+dir="th_sensor/"
+path="csv_writer/"
+
+echo "[+] Preparing file : ${file}"
+scp ${file} ${id}\@${ip}:${dir}
+
+
+exit 0

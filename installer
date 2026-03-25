@@ -63,6 +63,7 @@ rm -r csv_writer
 rm -r dht22
 rm -r manager
 rm dir*
+rm Makefile
 
 echo "[+] Installation finished"
 echo "[+] Ready to run !"

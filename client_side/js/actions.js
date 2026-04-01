@@ -1,6 +1,7 @@
 import { sendCommand } from "./api.js";
-import { displayFileButtons, displayResult } from "./ui.js";
-import { CLIENT_URL } from "../config/config.js";
+import { addDownloadButton, displayFileButtons, displayResult, displayTable } from "./ui.js";
+import { parseCSV } from "./parser.js";
+import { displayChart, clearChart } from "./graph.js"
 
 export async function getList() {
     const data = await sendCommand("getlist");
@@ -8,16 +9,23 @@ export async function getList() {
 }
 
 
-export async function getFile() {
-    const filename = document.getElementById("filename").value;
-    const data = await sendCommand("getfile", filename);
-    displayResult(data);
+export async function getFile(file) {
+    const content = await sendCommand("getfile", file);
+
+    if (content.error){
+        displayResult(data);
+        return;
+    }
+
+    parseCSV(content.data);
+    return content;
 }
 
 
 export async function startTracer() {
     const interval = document.getElementById("interval").value;
     const data = await sendCommand("starttracer", interval);
+    clearChart();
     displayResult(data);
 }
 
@@ -26,6 +34,7 @@ export async function stopTracer() {
     const goFurther = confirm("Vous êtes sur le point d'arrêter le traceur.\nCliquez OK pour confirmer");
     if (goFurther) {
         const data = await sendCommand("stoptracer");
+        clearChart();
         displayResult(data);
     }
 }
@@ -33,28 +42,38 @@ export async function stopTracer() {
 
 export async function getLogs() {
     const data = await sendCommand("getlogs");
+    clearChart();
     displayResult(data);
 }
 
 
 export async function fetchFileContent(file) {
     try {
-        const response = await fetch(CLIENT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                command: "getfile",
-                value: file
-            })
-        });
+        clearChart();
+        const response = await getFile(file);
 
-        const json = await response.json();
-        displayResult(json);
+        if (response.error) {
+            displayResult(response);
+            return;
+        }
+
+        if (!response.data) {
+            displayResult({ error: "No data received" });
+            return;
+        }
+
+        const parsed = parseCSV(response.data);
+
+        displayTable(parsed);
+        displayChart(parsed.data);
+
+        addDownloadButton(response.data, file);
 
     } catch (err) {
-        displayResult({ error: "Erreur réseau" });
+        displayResult({ error: err.message || "Erreur réseau" });
     }
 }
+
 
 export async function loadFileList() {
     try {
@@ -63,10 +82,11 @@ export async function loadFileList() {
         if (data.data) {
             displayFileButtons(data.data, fetchFileContent);
         } else {
+            clearChart();
             displayResult(data);
         }
 
-    } catch {
-        displayResult({ error: "Erreur réseau" });
+    } catch (err) {
+        displayResult({ error: err.message || "Erreur réseau" });
     }
 }

@@ -24,3 +24,39 @@ pre {
     max-height: 400px;
     overflow: auto;
 }
+
+#output.error {
+    color: #911e16;
+}
+
+#dataTable {
+    border-collapse: collapse;
+    width: 50%;
+}
+
+#dataTable td, #dataTable th {
+    border: 1px solid #ccc;
+    padding: 6px;
+}
+
+#dataTable tr.selected {
+    background-color: #ffeeba;
+}
+
+#dataTable th,
+#dataTable td {
+    padding: 6px 10px;
+    text-align: center;
+}
+
+
+/* chart menu*/
+#chartContainer {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.3s ease;
+}
+
+#chartContainer.expanded {
+    max-height: 90%; /*ajust if needed*/
+}

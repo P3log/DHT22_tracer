@@ -7,25 +7,34 @@
     <link rel="stylesheet" href="/css/loader.css">
 </head>
 <body>
-
-<h1>Serre</h1>
-
-<div class="panel">
-
-    <button id="btnList" onclick="getList()">Fichiers de mesure</button>
-
-    <input type="number" id="interval" placeholder="Intervalle (min)">
-
-    <button onclick="startTracer()">Lancer capteur</button>
-
-    <button onclick="stopTracer()">Arrêter capteur</button>
-
-    <button onclick="getLogs()">Logs</button>
-
-    <label for="fileInput">Fichier</label>
-    <input type="file" id="fileInput" accept=".csv">
-
+<div class="header-container">
+    <div class="header">
+        <div class="title">
+            <h1>Serre</h1>
+        </div>
+    
+        <div class="controls">
+            <input type="number" id="interval" placeholder="min" class="input-small">
+    
+            <button class="btn btn-start" onclick="startTracer()">Lancer</button>
+            <button class="btn btn-stop" onclick="stopTracer()">Arrêter</button>
+        </div>
+    </div>
+    
+    <div class="panel row">
+        <button id="btnList" class="btn" onclick="getList()">Fichiers de mesure</button>
+    
+        <div class="spacer"></div>
+    
+        <label class="btn file-upload">
+            Charger CSV
+            <input type="file" id="fileInput" accept=".csv">
+        </label>
+        
+        <button class="btn" onclick="getLogs()">Logs</button>
+    </div>
 </div>
+
 
 <div id="fileList"></div>
 

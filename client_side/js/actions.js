@@ -66,7 +66,7 @@ export async function fetchFileContent(file) {
 
         displayTable(parsed);
         displayChart(parsed.data);
-
+        openChartPanel();
         addDownloadButton(response.data, file);
 
     } catch (err) {

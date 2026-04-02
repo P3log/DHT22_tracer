@@ -1,4 +1,3 @@
-
 // Possible fields : error, data, status
 export function formatResponse(response) {
     if (!response) return "Empty response";

@@ -1,6 +1,17 @@
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
+    margin: 0 auto;     /* horizontally centered */
+    width: 80vw;        /* max 1/2 screen width */
+}
+
+.header-container {
+    width: 50%;
+}
+
+@media (max-width: 650px) {
+    .header-container {
+        width: 100%;
+    }
 }
 
 .panel {
@@ -59,4 +70,81 @@ pre {
 
 #chartContainer.expanded {
     max-height: 90%; /*ajust if needed*/
+}
+
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.spacer {
+    flex: 1;
+}
+
+
+.input-small {
+    width: 70px;
+    text-align: center;
+}
+
+/* buttons */
+.btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    background-color: #e9e9ed;  /* default background color */
+}
+
+.btn-start {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-stop {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-file {
+    background-color: #28a745;
+    color: white;
+}
+
+.file-upload {
+    position: relative;
+    overflow: hidden;
+}
+
+.file-upload input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+.btn:hover {
+    filter: brightness(0.9);
+}
+
+.btn:active {
+    transform: scale(0.97);
 }

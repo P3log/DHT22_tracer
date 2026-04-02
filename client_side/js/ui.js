@@ -1,4 +1,5 @@
 
+// Display the concerned field content and not the JSON
 export function displayResult(data) {
     const output = document.getElementById("output");
     
@@ -17,7 +18,6 @@ export function displayResult(data) {
         output.textContent = data.data;
         return;
     }
-
 
     // fallback
     output.textContent = JSON.stringify(data, null, 2);
@@ -44,7 +44,8 @@ export function displayFileButtons(files, onClick) {
         btn.addEventListener("click", function () {
             withLoading(btn, () => onClick(file));
         });
-
+        btn.classList.add("btn", "btn-file");
+        
         container.appendChild(btn);
     });
 }

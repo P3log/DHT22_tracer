@@ -1,4 +1,4 @@
-import { getFile, startTracer, stopTracer, getLogs, loadFileList } from "./actions.js";
+import { getFile, startTracer, stopTracer, getLogs, loadFileList, checkTracerStatus } from "./actions.js";
 import { withLoading, displayTable, displayStats, clearStats, displaySelectedFile, resetSelectedFile } from "./ui.js";
 import { parseCSV } from "./parser.js";
 import { clearChart, displayChart, resizeChart } from "./graph.js";
@@ -9,6 +9,8 @@ window.startTracer = startTracer;
 window.getLogs = getLogs;
 window.openChartPanel = openChartPanel; // open the chart by default
 
+// Tracer status -- When the page is loaded
+document.addEventListener("load", checkTracerStatus());
 
 // List files
 document.getElementById("btnList").addEventListener("click", function () {

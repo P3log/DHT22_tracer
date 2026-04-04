@@ -1,5 +1,6 @@
 import { sendCommand } from "./api.js";
-import { addDownloadButton, displayFileButtons, displayResult, displayTable, displayStats, clearStats, displaySelectedFile, resetSelectedFile } from "./ui.js";
+import { addDownloadButton, displayFileButtons, displayResult, displayTable, displayStats, clearStats, 
+    displaySelectedFile, resetSelectedFile, setActiveStatus, setInactiveStatus } from "./ui.js";
 import { parseCSV } from "./parser.js";
 import { displayChart, clearChart } from "./graph.js"
 import { openChartPanel, closeChartPanel } from "./app.js";
@@ -36,10 +37,7 @@ export async function startTracer() {
     const alreadyEnabled = "";
     // tracer enabled
     if (data.status || data.error === alreadyEnabled){
-        const statusText = document.getElementById("status-txt");
-        statusText.classList.remove("unknown-status", "disabled-status");
-        statusText.classList.add("enabled-status");
-        statusText.innerText = "🟢 Statut : actif";
+        setActiveStatus();
     }
 }
 
@@ -53,10 +51,16 @@ export async function stopTracer() {
     displayResult(data);
     // tracer disabled
     if (data.status){
-        const statusText = document.getElementById("status-txt");
-        statusText.classList.remove("unknown-status", "enabled-status");
-        statusText.classList.add("disabled-status");
-        statusText.innerText = "🔴 Statut : inactif";
+        setInactiveStatus();
+    }
+}
+
+export async function checkTracerStatus() {
+    const tracer = await sendCommand("pingtracer");
+    if (tracer.status === "Active") {
+        setActiveStatus();
+    } else if (tracer.status === "Inactive") {
+        setInactiveStatus();
     }
 }
 

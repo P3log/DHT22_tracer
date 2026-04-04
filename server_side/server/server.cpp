@@ -10,6 +10,7 @@
 #include <arpa/inet.h>
 #include <mutex>
 #include <signal.h>
+#include <sys/wait.h>
 #include "../include/logger.hpp"
 
 #define PORT 4531
@@ -30,6 +31,7 @@ enum Command {
     CMD_ENABLE,
     CMD_STOP,
     CMD_GETLOGS,
+    CMD_PING,
     CMD_INVALID
 };
 
@@ -56,8 +58,9 @@ const vector<CommandEntry> commands = {
     {"getlist", CMD_GETLIST},
     {"getfile", CMD_GETFILE},
     {"starttracer", CMD_ENABLE},
+    {"stoptracer", CMD_STOP},
     {"getlogs", CMD_GETLOGS},
-    {"stoptracer", CMD_STOP}
+    {"pingtracer", CMD_PING}
 };
 
 
@@ -259,6 +262,7 @@ string stop_tracer() {
     if (kill(tracer_pid, SIGTERM) != 0) {
         return "{\"error\":\"Kill failed\"}";
     }
+    waitpid(tracer_pid, nullptr, 0);
 
     tracer_pid = -1;
     return "{\"status\":\"Stopped\"}";
@@ -348,6 +352,18 @@ void handle_client(int client_sock) {
         case CMD_GETLOGS: // not traced
             response_body = getlogs();
             break;
+
+        case CMD_PING: // not traced
+            {
+                lock_guard<mutex> lock(tracer_mutex);
+                bool res = is_process_alive(tracer_pid);
+                if (res){
+                    response_body = ("{\"status\":\"Active\"}");
+                } else {
+                    response_body = ("{\"status\":\"Inactive\"}");
+                }
+                break;
+            }
             
         default: // CMD_INVALID
             logger.log(req_log.str());

@@ -227,3 +227,17 @@ export function displaySelectedFile (filename){
     const title = document.getElementById("selected-file");
     title.innerText = filename;
 }
+
+export function setInactiveStatus() {
+    const statusText = document.getElementById("status-txt");
+    statusText.classList.remove("unknown-status", "enabled-status");
+    statusText.classList.add("disabled-status");
+    statusText.innerText = "🔴 Statut : inactif";
+}
+
+export function setActiveStatus() {
+    const statusText = document.getElementById("status-txt");
+    statusText.classList.remove("unknown-status", "disabled-status");
+    statusText.classList.add("enabled-status");
+    statusText.innerText = "🟢 Statut : actif";
+}

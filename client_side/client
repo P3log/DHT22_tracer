@@ -9,4 +9,3 @@ SERVER_PID=$!
 sleep 1
 xdg-open http://localhost:$PORT
 
-kill -9 $SERVER_PID

@@ -206,6 +206,15 @@ export function displayStats(parsed) {
     tr3.appendChild(td3);
     table.appendChild(tr3);
 
+    const tr4 = document.createElement("tr");
+    const th4 = document.createElement("th");
+    const td4 = document.createElement("td");
+    th4.append("Température médiane");
+    td4.append(`${stats.medianTemperature.toFixed(2)} °C`);
+    tr4.appendChild(th4);
+    tr4.appendChild(td4);
+    table.appendChild(tr4);
+
     myDiv.appendChild(table);
     statistics.appendChild(myDiv);
 

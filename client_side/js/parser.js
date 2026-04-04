@@ -12,6 +12,7 @@ export function parseCSV(content) {
     let count = 0;
     let sumHumidity = 0;
     let sumTemperature = 0;
+    let temperatureMeasures = [];
 
     const data = lines.slice(1)
         .filter(line => line.trim() !== "")
@@ -26,7 +27,10 @@ export function parseCSV(content) {
                 count++;
                 sumHumidity += Number.parseFloat(hdt);
                 sumTemperature += Number.parseFloat(tmp);
+                temperatureMeasures.push(Number.parseFloat(tmp));
             }
+
+            temperatureMeasures.sort((a,b) => a - b);
 
             return {
                 rawDate: date,
@@ -43,7 +47,8 @@ export function parseCSV(content) {
         {
             nbMeasures: count,
             avgHumidity: sumHumidity / count,
-            avgTemperature: sumTemperature / count
+            avgTemperature: sumTemperature / count,
+            medianTemperature: temperatureMeasures.at(Number.parseInt(count/2))
         } : null;
 
     return { headers, data, stats };
